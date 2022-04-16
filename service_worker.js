@@ -4,6 +4,31 @@ chrome.action.onClicked.addListener(function (activeTab) {
     });
 });
 
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status === 'complete') {
+        chrome.scripting.executeScript({
+            target: {
+                tabId
+            },
+            function: grab
+        }, links => {
+            console.log(links[0]?.result)
+            chrome.storage.local.get(links[0]?.result, indb => {
+                console.log(indb)
+                chrome.scripting.executeScript({
+                    target: {
+                        tabId
+                    },
+                    function: paint,
+                    args: [
+                        Object.keys(indb)
+                    ]
+                }, returnData => null);
+            });
+        });
+    }
+});
+
 chrome.runtime.onInstalled.addListener(function (details) {
     chrome.contextMenus.create({
         id: 'link-note-link',
