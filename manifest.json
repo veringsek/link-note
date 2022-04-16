@@ -16,7 +16,9 @@
     "permissions": [
         "contextMenus", 
         "scripting", 
-        "tabs"
+        "tabs", 
+        "storage", 
+        "unlimitedStorage"
     ], 
     "host_permissions": [
         "*://*/*"
