@@ -1,0 +1,14 @@
+{
+    "appName": {
+        "message": "Link Note"
+    },
+    "appDesc": {
+        "message": ""
+    }, 
+    "noteThisLink": {
+        "message": "對此連結註記"
+    }, 
+    "noteThisPage": {
+        "message": "對此頁面註記"
+    }
+}

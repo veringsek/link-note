@@ -1,0 +1,14 @@
+{
+    "appName": {
+        "message": "Link Note"
+    },
+    "appDesc": {
+        "message": ""
+    }, 
+    "noteThisLink": {
+        "message": "Note this link"
+    }, 
+    "noteThisPage": {
+        "message": "Note this page"
+    }
+}
