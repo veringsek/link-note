@@ -1,7 +1,8 @@
 chrome.action.onClicked.addListener(function (activeTab) {
-    chrome.tabs.create({
-        url: `https://github.com/veringsek/link-note`
-    });
+    chrome.runtime.openOptionsPage();
+    // chrome.tabs.create({
+    //     url: `https://github.com/veringsek/link-note`
+    // });
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -85,3 +86,7 @@ function grabAndPaint(tabId) {
         });
     });
 }
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    console.log(message);
+});
