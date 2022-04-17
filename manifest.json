@@ -5,7 +5,10 @@
     "version": "0.0.2",
     "default_locale": "en",
     "icons": {
-        "16": "imgs/icon-16x16.png"
+        "16": "imgs/icon-16x16.png",
+        "32": "imgs/icon-32x32.png",
+        "48": "imgs/icon-48x48.png",
+        "128": "imgs/icon-128x128.png"
     },
     "action": {
         "default_icon": "imgs/icon-16x16.png"
