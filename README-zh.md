@@ -1,3 +1,5 @@
+<img src="imgs/icon.svg" alt="icon" width="100" />
+
 # LinkNote
 
 [English](README.md) 中文
