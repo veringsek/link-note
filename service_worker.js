@@ -6,26 +6,7 @@ chrome.action.onClicked.addListener(function (activeTab) {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
-        chrome.scripting.executeScript({
-            target: {
-                tabId
-            },
-            function: grab
-        }, links => {
-            console.log(links[0]?.result)
-            chrome.storage.local.get(links[0]?.result, indb => {
-                console.log(indb)
-                chrome.scripting.executeScript({
-                    target: {
-                        tabId
-                    },
-                    function: paint,
-                    args: [
-                        Object.keys(indb)
-                    ]
-                }, returnData => null);
-            });
-        });
+        grabAndPaint(tabId);
     }
 });
 
@@ -62,33 +43,12 @@ chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
             note: 1
         }
     }, () => {
-        chrome.scripting.executeScript({
-            target: {
-                tabId: tab.id
-            },
-            function: grab
-        }, links => {
-            console.log(links[0]?.result)
-            chrome.storage.local.get(links[0]?.result, indb => {
-                console.log(indb)
-                chrome.scripting.executeScript({
-                    target: {
-                        tabId: tab.id
-                    },
-                    function: paint,
-                    args: [
-                        Object.keys(indb)
-                    ]
-                }, returnData => null);
-            });
-        });
+        grabAndPaint(tab.id);
     });
 });
 
 function paint(links) {
     for (let element of document.links) {
-        console.log(links)
-        console.log(element.href)
         if (links.includes(element.href)) {
             element.style.color = '#FF0000';
             element.style.fontWeight = 'bold';
@@ -98,4 +58,30 @@ function paint(links) {
 
 function grab() {
     return [...document.links].map(link => link.href);
+}
+
+function grabAndPaint(tabId) {
+    chrome.scripting.executeScript({
+        target: { tabId },
+        function: grab
+    }, returneds => {
+        if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError);
+        }
+        if (!returneds || returneds.length < 1) return;
+        let links = returneds[0].result;
+        chrome.storage.local.get(links, indb => {
+            chrome.scripting.executeScript({
+                target: { tabId },
+                function: paint,
+                args: [
+                    Object.keys(indb)
+                ]
+            }, returneds => {
+                if (chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError);
+                }
+            });
+        });
+    });
 }
