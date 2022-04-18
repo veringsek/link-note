@@ -53,12 +53,19 @@ chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
 });
 
 function paint(links) {
-    for (let element of document.links) {
-        if (links.includes(element.href)) {
-            element.style.color = '#FF0000';
-            element.style.fontWeight = 'bold';
+    chrome.storage.local.get('$config.types$', results => {
+        let types = results['$config.types$'];
+        for (let element of document.links) {
+            // if (links.includes(element.href)) {
+            if (!(element.href in links)) continue;
+            let link = links[element.href];
+            let type = types[link.type];
+            element.style.color = type.color;
+            console.log(type.color);
+            console.log(type);
+            if (type.bold) element.style.fontWeight = 'bold';
         }
-    }
+    });
 }
 
 function grab() {
@@ -80,7 +87,7 @@ function grabAndPaint(tabId) {
                 target: { tabId },
                 function: paint,
                 args: [
-                    Object.keys(indb)
+                    indb
                 ]
             }, returneds => {
                 if (chrome.runtime.lastError) {
