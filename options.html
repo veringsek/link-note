@@ -3,14 +3,49 @@
 
 <head>
     <title>LinkNote - Options</title>
+    <script src="common.js"></script>
 </head>
 
 <body>
-    <textarea id="txtData"></textarea>
-    <input type="button" id="btnExport" value="Export" />
-    <input type="button" id="btnImport" value="Import" />
-    <script src="options.js"></script>
-    <span id="txtMessage"></span>
+    <div id="app">
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>Domain</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyData"></tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Color</th>
+                    <th>Bold</th>
+                    <th>Background</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyTypes">
+                <tr id="trNewType">
+                    <th><input type="text" id="txtNewTypeType" placeholder="Type"></th>
+                    <th><input type="text" id="txtNewTypeDesc" placeholder="Description"></th>
+                    <th><input type="color" id="clrNewTypeColor" value="#FF0000" placeholder="Color"></th>
+                    <th><input type="checkbox" id="chkNewTypeBold" placeholder="Bold"></th>
+                    <th><input type="color" id="clrNewTypeBackground" value="#FFFFFF" placeholder="Background"></th>
+                    <th><input type="button" id="btnNewType" value="+"></th>
+                </tr>
+            </tbody>
+        </table>
+        <input type="button" value="Export" id="btnExport">
+        <input type="button" value="Import" id="btnImport">
+        <textarea name="" id="txtData" cols="30" rows="10"></textarea>
+        <span id="txtMessage"></span>
+
+        <script src="options.js"></script>
+    </div>
 </body>
 
 </html>

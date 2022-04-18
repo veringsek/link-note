@@ -38,7 +38,7 @@ chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
         [link]: {
             url: link,
             domain: info.pageUrl,
-            note: 1
+            type: 1
         }
     }, () => {
         grabAndPaint(tab.id);

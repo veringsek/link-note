@@ -16,14 +16,14 @@
     "background": {
         "service_worker": "service_worker.js"
     },
-    "options_page": "options.html", 
+    "options_page": "options.html",
     "permissions": [
-        "contextMenus", 
-        "scripting", 
-        "tabs", 
-        "storage", 
+        "contextMenus",
+        "scripting",
+        "tabs",
+        "storage",
         "unlimitedStorage"
-    ], 
+    ],
     "host_permissions": [
         "*://*/*"
     ]
