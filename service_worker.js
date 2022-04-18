@@ -9,36 +9,43 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.runtime.onInstalled.addListener(function (details) {
-    chrome.contextMenus.create({
-        id: 'link-note-link',
-        title: chrome.i18n.getMessage('noteThisLink'),
-        contexts: ['link'],
-        targetUrlPatterns: [
-            '*://*/*'
-        ]
-    });
-    chrome.contextMenus.create({
-        id: 'link-note-page',
-        title: chrome.i18n.getMessage('noteThisPage'),
-        contexts: ['all'],
-        targetUrlPatterns: [
-            '*://*/*'
-        ]
+    chrome.storage.local.get('$config.types$', results => {
+        let types = results['$config.types$'];
+        for (let t in types) {
+            let type = types[t];
+            chrome.contextMenus.create({
+                id: `link-note-link--${type.type}`,
+                title: `${chrome.i18n.getMessage('noteThisLink')} - ${type.type}`,
+                contexts: ['link'],
+                targetUrlPatterns: [
+                    '*://*/*'
+                ]
+            });
+            chrome.contextMenus.create({
+                id: `link-note-page--${type.type}`,
+                title: `${chrome.i18n.getMessage('noteThisPage')} - ${type.type}`,
+                contexts: ['all'],
+                targetUrlPatterns: [
+                    '*://*/*'
+                ]
+            });
+        }
     });
 });
 
 chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
     let link;
-    if (info.menuItemId === 'link-note-page') {
+    let [target, type] = info.menuItemId.split('--');
+    if (target === 'link-note-page') {
         link = info.pageUrl;
-    } else if (info.menuItemId === 'link-note-link') {
+    } else if (target === 'link-note-link') {
         link = info.linkUrl;
     }
     chrome.storage.local.set({
         [link]: {
             url: link,
             domain: info.pageUrl,
-            type: 1
+            type
         }
     }, () => {
         grabAndPaint(tab.id);
