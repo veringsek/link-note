@@ -9,28 +9,13 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.runtime.onInstalled.addListener(function (details) {
-    chrome.storage.local.get('$config.types$', results => {
-        let types = results['$config.types$'];
-        for (let t in types) {
-            let type = types[t];
-            chrome.contextMenus.create({
-                id: `link-note-link--${type.type}`,
-                title: `${chrome.i18n.getMessage('noteThisLink')} - ${type.type}`,
-                contexts: ['link'],
-                targetUrlPatterns: [
-                    '*://*/*'
-                ]
-            });
-            chrome.contextMenus.create({
-                id: `link-note-page--${type.type}`,
-                title: `${chrome.i18n.getMessage('noteThisPage')} - ${type.type}`,
-                contexts: ['page'],
-                targetUrlPatterns: [
-                    '*://*/*'
-                ]
-            });
-        }
-    });
+    createContextMenus();
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message === 'update-contextmenus') {
+        createContextMenus(sendResponse);
+    }
 });
 
 chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
@@ -52,11 +37,38 @@ chrome.contextMenus.onClicked.addListener(function contextClick(info, tab) {
     });
 });
 
+function createContextMenus(callback) {
+    chrome.contextMenus.removeAll(() => {
+        chrome.storage.local.get('$config.types$', results => {
+            let types = results['$config.types$'];
+            for (let t in types) {
+                let type = types[t];
+                chrome.contextMenus.create({
+                    id: `link-note-link--${type.type}`,
+                    title: `${chrome.i18n.getMessage('noteThisLink')} - ${type.type}`,
+                    contexts: ['link'],
+                    targetUrlPatterns: [
+                        '*://*/*'
+                    ]
+                });
+                chrome.contextMenus.create({
+                    id: `link-note-page--${type.type}`,
+                    title: `${chrome.i18n.getMessage('noteThisPage')} - ${type.type}`,
+                    contexts: ['page'],
+                    targetUrlPatterns: [
+                        '*://*/*'
+                    ]
+                });
+            }
+            if (typeof callback === 'function') callback();
+        });
+    });
+}
+
 function paint(links) {
     chrome.storage.local.get('$config.types$', results => {
         let types = results['$config.types$'];
         for (let element of document.links) {
-            // if (links.includes(element.href)) {
             if (!(element.href in links)) continue;
             let link = links[element.href];
             let type = types[link.type];

@@ -36,19 +36,19 @@ function showTypes() {
             tdDesc.innerHTML = type.desc;
             let tdColor = common.createElement('td', {}, tr);
             let clrColor = common.createElement('input', {
-                type: 'color', 
+                type: 'color',
                 disabled: true
             }, tdColor);
             clrColor.value = type.color;
             let tdBold = common.createElement('td', {}, tr);
             let chkBold = common.createElement('input', {
-                type: 'checkbox', 
+                type: 'checkbox',
                 disabled: true
             }, tdBold);
             chkBold.checked = type.bold;
             let tdBackground = common.createElement('td', {}, tr);
             let clrBackground = common.createElement('input', {
-                type: 'color', 
+                type: 'color',
                 disabled: true
             }, tdBackground);
             clrBackground.value = type.background;
@@ -64,7 +64,7 @@ function newType() {
     let bold = chkNewTypeBold.checked;
     let background = clrNewTypeBackground.value;
     chrome.storage.local.get({
-            '$config.types$': {}
+        '$config.types$': {}
     }, results => {
         let types = results['$config.types$'];
         types[type] = {
@@ -76,7 +76,10 @@ function newType() {
         };
         chrome.storage.local.set({
             '$config.types$': types
-        }, showTypes);
+        }, () => {
+            chrome.runtime.sendMessage('update-contextmenus');
+            showTypes();
+        });
     });
 }
 
