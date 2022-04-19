@@ -24,7 +24,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
             chrome.contextMenus.create({
                 id: `link-note-page--${type.type}`,
                 title: `${chrome.i18n.getMessage('noteThisPage')} - ${type.type}`,
-                contexts: ['all'],
+                contexts: ['page'],
                 targetUrlPatterns: [
                     '*://*/*'
                 ]
